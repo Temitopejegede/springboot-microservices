@@ -9,12 +9,19 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+//@AllArgsConstructor
 @NoArgsConstructor
-@AllArgsConstructor
 public class ErrorDetails {
 
     private LocalDateTime timeStamp;
     private String message;
     private String path;
-    private  String errorCode;
+    private String errorCode;
+
+    public ErrorDetails(LocalDateTime timeStamp, String message, String path, String errorCode) {
+        this.timeStamp = timeStamp;
+        this.message = message;
+        this.path = path;
+        this.errorCode = errorCode;
+    }
 }
