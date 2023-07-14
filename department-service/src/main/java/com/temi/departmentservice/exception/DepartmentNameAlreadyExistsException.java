@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class DepartmentCodeAlreadyExists extends RuntimeException{
+public class DepartmentNameAlreadyExistsException extends RuntimeException {
 
     private String message;
 
-    public DepartmentCodeAlreadyExists(String message) {
+    public DepartmentNameAlreadyExistsException(String message) {
         super(message);
     }
 }
