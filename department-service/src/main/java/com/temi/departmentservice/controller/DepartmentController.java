@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DepartmentController {
 
-    private DepartmentService departmentService;
+    private final DepartmentService departmentService;
 
     public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
@@ -30,6 +30,11 @@ public class DepartmentController {
         return new ResponseEntity<>(savedDepartment, HttpStatus.CREATED);
     }
 
+    @PostMapping("save")
+    public ResponseEntity<List<DepartmentDto>> saveDepartments(@RequestBody List<DepartmentDto> departmentDtoList){
+        List<DepartmentDto> savedDepartments = departmentService.saveDepartments(departmentDtoList);
+        return new ResponseEntity<>(savedDepartments, HttpStatus.CREATED);
+    }
     //get department rest api
 
     @GetMapping("{department-code}")

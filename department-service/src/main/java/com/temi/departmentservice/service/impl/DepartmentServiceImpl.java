@@ -40,6 +40,8 @@ public class DepartmentServiceImpl implements DepartmentService {
             }
         }
 
+
+
 //        Department department = new Department(
 //                departmentDto.getId(),
 //                departmentDto.getDepartmentName(),
@@ -57,6 +59,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 //                savedDepartment.getDepartmentCode()
 //        );
     return AutoDepartmentMapper.MAPPER.mapToDepartmentDto(savedDepartment);
+    }
+
+    @Override
+    public List<DepartmentDto> saveDepartments(List<DepartmentDto> departmentDtos) {
+
+        List<Department> departments = departmentDtos.stream().map(AutoDepartmentMapper.MAPPER::mapToDepartment).toList();
+
+        List<Department> savedDepartments = departmentRepository.saveAll(departments);
+
+        return savedDepartments.stream().map(AutoDepartmentMapper.MAPPER::mapToDepartmentDto).collect(Collectors.toList());
     }
 
     @Override
