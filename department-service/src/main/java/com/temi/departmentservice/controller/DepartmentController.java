@@ -38,6 +38,12 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentDto, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable("id") Long departmentId){
+        DepartmentDto departmentById = departmentService.getDepartmentById(departmentId);
+        return ResponseEntity.ok(departmentById);
+    }
+
     @GetMapping
     public ResponseEntity<List<DepartmentDto>> getAllDepartments(){
         List<DepartmentDto> departments = departmentService.getAllDepartments();

@@ -10,6 +10,8 @@ public interface DepartmentService {
 
     DepartmentDto getDepartmentByCode(String code);
 
+    DepartmentDto getDepartmentById(Long id);
+
     List<DepartmentDto> getAllDepartments();
 
     void deleteDepartment(Long id);
