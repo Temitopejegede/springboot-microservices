@@ -23,6 +23,7 @@ public class Department {
     @Column(nullable = false, unique = true)
     private String departmentCode;
 
+
     public Department() {
     }
 

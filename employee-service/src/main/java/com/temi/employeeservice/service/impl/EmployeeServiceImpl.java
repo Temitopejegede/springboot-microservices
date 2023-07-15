@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    private RestTemplate restTemplate;
+    private WebClient webClient;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RestTemplate restTemplate) {
+    /*Using Rest Template*/
+//    private RestTemplate restTemplate;
+
+//    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RestTemplate restTemplate) {
+//        this.employeeRepository = employeeRepository;
+//        this.restTemplate = restTemplate;
+//    }
+
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, WebClient webClient) {
         this.employeeRepository = employeeRepository;
-        this.restTemplate = restTemplate;
+        this.webClient = webClient;
     }
 
     @Override
@@ -72,16 +82,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
         );
+
+        /*Using Rest Template*/
+        /*
         ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/departments/" + employee.getDepartmentCode(),
                 DepartmentDto.class);
 
         DepartmentDto departmentDto = responseEntity.getBody();
+ */
+
+        DepartmentDto departmentDto = webClient.get()
+                .uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
+                .retrieve()
+                .bodyToMono(DepartmentDto.class)
+                .block();
 //        EmployeeDto employeeDto = new EmployeeDto(
 //                employee.getId(),
 //                employee.getFirstName(),
 //                employee.getLastName(),
 //                employee.getEmail()
-//        );\
+//        );
+
         EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
 
         ApiResponseDto apiResponseDto = new ApiResponseDto();
