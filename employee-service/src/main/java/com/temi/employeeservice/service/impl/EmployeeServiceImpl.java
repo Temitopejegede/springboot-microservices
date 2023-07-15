@@ -1,5 +1,7 @@
 package com.temi.employeeservice.service.impl;
 
+import com.temi.employeeservice.dto.ApiResponseDto;
+import com.temi.employeeservice.dto.DepartmentDto;
 import com.temi.employeeservice.dto.EmployeeDto;
 import com.temi.employeeservice.entity.Employee;
 import com.temi.employeeservice.exceptions.EmailAlreadyExistsException;
@@ -8,7 +10,9 @@ import com.temi.employeeservice.mapper.AutoEmployeeMapper;
 import com.temi.employeeservice.repository.EmployeeRepository;
 import com.temi.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +24,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    private RestTemplate restTemplate;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RestTemplate restTemplate) {
         this.employeeRepository = employeeRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -60,18 +67,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto getEmployeeById(Long employeeId) {
+    public ApiResponseDto getEmployeeById(Long employeeId) {
 
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
         );
+        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/departments/" + employee.getDepartmentCode(),
+                DepartmentDto.class);
+
+        DepartmentDto departmentDto = responseEntity.getBody();
 //        EmployeeDto employeeDto = new EmployeeDto(
 //                employee.getId(),
 //                employee.getFirstName(),
 //                employee.getLastName(),
 //                employee.getEmail()
 //        );\
-        return AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
+        EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
+
+        ApiResponseDto apiResponseDto = new ApiResponseDto();
+        apiResponseDto.setEmployeeDto(employeeDto);
+        apiResponseDto.setDepartmentDto(departmentDto);
+
+        return apiResponseDto;
     }
 
     @Override

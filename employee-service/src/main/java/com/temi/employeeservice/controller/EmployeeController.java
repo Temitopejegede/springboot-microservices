@@ -1,5 +1,6 @@
 package com.temi.employeeservice.controller;
 
+import com.temi.employeeservice.dto.ApiResponseDto;
 import com.temi.employeeservice.dto.EmployeeDto;
 import com.temi.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -33,10 +34,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(
+    public ResponseEntity<ApiResponseDto> getEmployeeById(
             @PathVariable("id") Long employeeId){
-        EmployeeDto employeeDto = employeeService.getEmployeeById(employeeId);
-        return new ResponseEntity<>(employeeDto, HttpStatus.OK);
+        ApiResponseDto apiResponseDto = employeeService.getEmployeeById(employeeId);
+        return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
     }
 
     @GetMapping()

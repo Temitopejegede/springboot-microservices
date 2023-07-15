@@ -1,5 +1,6 @@
 package com.temi.employeeservice.service;
 
+import com.temi.employeeservice.dto.ApiResponseDto;
 import com.temi.employeeservice.dto.EmployeeDto;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface EmployeeService {
 
     List<EmployeeDto> saveEmployees(List<EmployeeDto> employeeDtos);
 
-    EmployeeDto getEmployeeById(Long employeeId);
+    ApiResponseDto getEmployeeById(Long employeeId);
 
     List<EmployeeDto> getAllEmployees();
 
