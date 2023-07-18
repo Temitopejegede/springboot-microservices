@@ -10,11 +10,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SpringBootApplication
 @EnableFeignClients
 public class EmployeeServiceApplication {
-
-	@Bean
-	WebClient webClient()	{
-		return WebClient.builder().build();
-	}
+//
+//	@Bean
+//	WebClient webClient()	{
+//		return WebClient.builder().build();
+//	}
 //	@Bean
 //	public RestTemplate restTemplate(){
 //		return new RestTemplate();

@@ -8,6 +8,7 @@ import com.temi.employeeservice.exceptions.EmailAlreadyExistsException;
 import com.temi.employeeservice.exceptions.ResourceNotFoundException;
 import com.temi.employeeservice.mapper.AutoEmployeeMapper;
 import com.temi.employeeservice.repository.EmployeeRepository;
+import com.temi.employeeservice.service.APIClient;
 import com.temi.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +26,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    private WebClient webClient;
 
-    /*Using Rest Template*/
+    /**
+     * Using rest template
+     */
 //    private RestTemplate restTemplate;
 
 //    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RestTemplate restTemplate) {
@@ -35,10 +37,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        this.restTemplate = restTemplate;
 //    }
 
+    /**
+     * Using web client
+     */
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, WebClient webClient) {
+//    private final WebClient webClient;
+//    public EmployeeServiceImpl(EmployeeRepository employeeRepository, WebClient webClient) {
+//        this.employeeRepository = employeeRepository;
+//        this.webClient = webClient;
+//    }
+
+    private APIClient apiClient;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, APIClient apiClient) {
         this.employeeRepository = employeeRepository;
-        this.webClient = webClient;
+        this.apiClient = apiClient;
     }
 
     @Override
@@ -83,7 +96,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
         );
 
-        /*Using Rest Template*/
+        /**
+         * Using rest template
+         */
         /*
         ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/departments/" + employee.getDepartmentCode(),
                 DepartmentDto.class);
@@ -91,11 +106,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         DepartmentDto departmentDto = responseEntity.getBody();
  */
 
-        DepartmentDto departmentDto = webClient.get()
-                .uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
-                .retrieve()
-                .bodyToMono(DepartmentDto.class)
-                .block();
+        /**
+         * Using web client
+         */
+//        DepartmentDto departmentDto = webClient.get()
+//                .uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
+//                .retrieve()
+//                .bodyToMono(DepartmentDto.class)
+//                .block();
+
+
 //        EmployeeDto employeeDto = new EmployeeDto(
 //                employee.getId(),
 //                employee.getFirstName(),
@@ -103,6 +123,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //                employee.getEmail()
 //        );
 
+        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
         EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
 
         ApiResponseDto apiResponseDto = new ApiResponseDto();
